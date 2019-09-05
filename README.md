@@ -1,7 +1,7 @@
 # STM32 Build Environment 
 
 ## How To:
-1. Run the setup script to begin using this environment.
+1. Run the setup script to begin using this environment.  
 __Note:__ This script is currently only working on Ubuntu and Mac.  I will port to work with RHEL type systems in the future.  
 ```
 ./setup.sh
