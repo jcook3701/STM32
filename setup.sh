@@ -66,10 +66,6 @@ case "$OS" in
 	echo "         Updating Git, Python, PIP, and Curl         "
 	echo "└─────────────────────────────────────────────────── "
 	sudo apt -y install git python python-pip curl
-	echo " ───────────────────────────────────────────────────┐"
-	echo "                Installing OpenOCD                   "
-	echo "└─────────────────────────────────────────────────── "
-	sudo apt -y install openocd
 	echo " ──────────────────────────────────────────────────┐"
 	echo "      Adding current user to '$GROUP' group         "
 	echo "└────────────────────────────────────────────────── "
