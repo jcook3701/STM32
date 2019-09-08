@@ -122,6 +122,7 @@ case "$OS" in
 	;;
 esac
 
+# Currently running commands in the Tools directory.
 echo " ──────────────────────────────────────────────────┐"
 echo "            Extracting gcc-arm-embedded             "
 echo "└────────────────────────────────────────────────── "
@@ -130,6 +131,12 @@ tar --extract \
     --bzip2 \
     --file=$GCC_PKG\
     --exclude='share/doc' 2> /dev/null
+echo " ──────────────────────────────────────────────────┐"
+echo "            Extracting en.stsw-link007              "
+echo "└────────────────────────────────────────────────── "
+unzip en.stsw-link007.zip
+
+# Return Back to Head of this repository.
 cd $BASE
 
 echo " ───────────────────────────────────────────────────┐"
