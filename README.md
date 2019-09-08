@@ -3,6 +3,11 @@
 ### Project Goal
 My initial goal is to port FreeRTOS to both the NUCLEO-L432KC & NUCLEO-H743ZI2 STM32 development boards.
 
+### Requirments
+#### Mac
+1. Home-brew
+
+
 ## Initial Setup
 1. Run the setup script to begin using this environment.  
 __Note:__ This script is currently only working on Ubuntu and Mac.  I will port to work with RHEL type systems in the future.  

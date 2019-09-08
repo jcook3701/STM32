@@ -40,27 +40,26 @@ CFLAGS = -mcpu=cortex-m7 \
 	-fno-exceptions \
 	-I"$(LIB_DIR_H7XX)/" \
 	-I"$(LIB_DIR_H7XX)/Drivers/BSP/STM32H7xx_Nucleo_144" \
-	-I"$(LIB_DIR_H7XX)/Drivers/CMSIS" \
-	-I"$(LIB_DIR_H7XX)/Drivers/STM32H7xx_HAL_Driver" \
-	-I"$(LIB_DIR_H7XX)/" \
-	-I"$(LIB_DIR_H7XX)/" \
-	-I"$(LIB_DIR_H7XX)/" \
-	-I"$(LIB_DIR_H7XX)/" \
-	-I"$(LIB_DIR_H7XX)/" \
-	-I"$(LIB_DIR_H7XX)/" \
-	-I"$(LIB_DIR_H7XX)/" \
-	-I"$(LIB_DIR_H7XX)/" \
-	-I"$(LIB_DIR_H7XX)/" \
-	-I"$(LIB_DIR_H7XX)/" \
-	-I"$(LIB_DIR_H7XX)/" \
-	-I"$(LIB_DIR_H7XX)/" \
-	-I"$(LIB_DIR_H7XX)/" \
-	-I"$(LIB_DIR_H7XX)/" \
-	-I"L2_Drivers" \
-	-I"L3_Utils" \
-	-I"L4_IO" \
-	-I"L5_Application" \
-	-I"L5_Assembly" \
+	-I"$(LIB_DIR_H7XX)/Drivers/CMSIS/Device/ST/STM32H7xx/Include" \
+	-I"$(LIB_DIR_H7XX)/Drivers/CMSIS/DSP/Include" \
+	-I"$(LIB_DIR_H7XX)/Drivers/CMSIS/Include" \
+	-I"$(LIB_DIR_H7XX)/Drivers/STM32H7xx_HAL_Driver/Inc" \
+	-I"$(LIB_DIR_H7XX)/Middlewares/FreeRTOS/Source/include" \
+	-I"$(LIB_DIR_H7XX)/Middlewares/FreeRTOS/Source/CMSIS_RTOS" \\
+	-I"$(LIB_DIR_H7XX)/Middlewares/LwIP/src/apps/httpd/" \
+	-I"$(LIB_DIR_H7XX)/Middlewares/LwIP/src/include/lwip" \
+	-I"$(LIB_DIR_H7XX)/Middlewares/LwIP/src/include/lwip/apps" \
+	-I"$(LIB_DIR_H7XX)/Middlewares/LwIP/src/include/lwip/priv" \
+	-I"$(LIB_DIR_H7XX)/Middlewares/LwIP/src/include/lwip/prot" \
+	-I"$(LIB_DIR_H7XX)/Middlewares/LwIP/src/include/netif" \
+	-I"$(LIB_DIR_H7XX)/Middlewares/LwIP/src/include/netif/ppp" \
+	-I"$(LIB_DIR_H7XX)/Middlewares/LwIP/src/include/netif/ppp/polarssl" \
+	-I"$(LIB_DIR_H7XX)/Middlewares/LwIP/src/include/posix" \
+	-I"$(LIB_DIR_H7XX)/Middlewares/LwIP/src/include/posix/sys" \
+	-I"$(LIB_DIR_H7XX)/Middlewares/LwIP/system/arch" \
+	-I"$(LIB_DIR_H7XX)/Middlewares/mbedTLS/" \
+	-I"application" \
+	-I"application/lib" \
 	-MMD -MP -c
 
 LINKFLAGS = -mcpu=cortex-m7 \
@@ -69,14 +68,17 @@ LINKFLAGS = -mcpu=cortex-m7 \
 	-Os -mthumb \
 	-fmessage-length=0 -ffunction-sections -fdata-sections \
 	-Wall -Wshadow -Wlogical-op -Wfloat-equal \
-	-T $(LIB_DIR_H7XX)//loader.ld \
+	-T $(LIB_DIR_H7XX)/SW4STM32/STM32H743ZI_Nucleo/STM32H743ZITx_FLASH.ld \
 	-nostartfiles \
 	-Xlinker \
 	--gc-sections -Wl,-Map,"$(MAP)" \
 	-specs=nano.specs
 
-# LIBRARIES			= $(shell find "$(LIB_DIR)" -name '*.c' -o -name '*.cpp')
-SOURCES	= $(shell find L5_Application L5_Assembly \
+# LIBRARIES = $(shell find "$(LIB_DIR)" -name '*.c' -o -name '*.cpp')
+
+# LIBRARIES = $(LIB_DIR_H7XX) 
+
+SOURCES	= $(shell find application/src \
 	-name '*.c' -o\
 	-name '*.s' -o \
 	-name '*.S' -o \
@@ -127,7 +129,6 @@ default:
 	@echo "    sym-build     - builds firmware project with embeddeding symbol table"
 	@echo "    flash         - builds and installs firmware on to SJOne board"
 	@echo "    sym-flash     - builds and installs firmware on to SJOne board with embeddeding symbol table"
-	@echo "    telemetry     - will launch telemetry interface"
 	@echo "    clean         - cleans project folder"
 	@echo "    cleaninstall  - cleans, builds and installs firmware"
 	@echo "    show-obj-list - Shows all object files that will be compiled"
@@ -302,10 +303,8 @@ clean:
 
 flash: build
 	bash -c "\
-	source $(SJBASE)/tools/Hyperload/modules/bin/activate && \
-	python2.7 $(SJBASE)/tools/Hyperload/hyperload.py -b 576000 -c 48000000 -a clocks -d $(SJDEV) $(BINARY)"
+	"
 
 telemetry:
 	@bash -c "\
-	source $(SJBASE)/tools/Telemetry/modules/bin/activate && \
-	python2.7 $(SJBASE)/tools/Telemetry/telemetry.py"
+	"

@@ -72,6 +72,10 @@ case "$OS" in
 	THE_GROUP=$(getent group | grep 'dial' | cut -d: -f1)
 	sudo adduser $USER $THE_GROUP
 	echo " ──────────────────────────────────────────────────┐"
+	echo "                Downloading libusb                  "
+	echo "└────────────────────────────────────────────────── "
+	sudo apt -y install libusb-1.0
+	echo " ──────────────────────────────────────────────────┐"
 	echo "           Downloading gcc-arm-embedded             "
 	echo "└────────────────────────────────────────────────── "
 	# ARM GCC Compiler Version 6
@@ -90,6 +94,18 @@ case "$OS" in
         xcode-select --install &> /dev/null	# Install Command Line tools (make etc...)
         sudo xcodebuild -license accept # Accept User Agreement
 	echo " ──────────────────────────────────────────────────┐"
+	echo "                Downloading libusb                  "
+	echo "└────────────────────────────────────────────────── "
+	which -s brew
+	if [[ $? != 0 ]] ; then
+	    # Install Homebrew
+	    # ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+	    echo "Please install homebrew"
+	else
+	    brew update
+	    brew install libusb
+	fi
+	echo " ──────────────────────────────────────────────────┐"
 	echo "           Downloading gcc-arm-embedded             "
 	echo "└────────────────────────────────────────────────── "
 	# ARM GCC Compiler Version 6
@@ -99,7 +115,8 @@ case "$OS" in
 	GCC_PKG=$ARM_GCC-mac.tar.bz2
 	;;
     
-    *)	#Default if Operating System other than Mac or Linux
+    *)	# Defa'ult if Operating System other than Mac or Linux
+	# I will never be supporing Windows systems as I refuse to pay for trash.
 	echo "Only Linux, OSX, and WSL (Windows Subsystem Linux) systems are supported! Exiting..."
 	exit 1
 	;;
