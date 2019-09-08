@@ -107,7 +107,7 @@ Middleware, RTOS, FreeRTOS, MPU
 
 In order to make the program work, you must do the following:
  - Open your preferred toolchain 
- - Rebuild all files and load your image into target memory
+ - RebuiF all files and load your image into target memory
  - Run the example
   
  * <h3><center>&copy; COPYRIGHT STMicroelectronics</center></h3>

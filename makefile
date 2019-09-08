@@ -2,7 +2,7 @@
 # Only affects the name of the generated binary.
 # TODO: Set this from the directory this makefile is stored in
 PROJ 			?= firmware
-# Affects what DBC is generated for SJSUOne board
+
 ENTITY			?= DBG
 
 # IMPORTANT: Must be accessible via the PATH variable!!!
@@ -25,7 +25,7 @@ define n
 
 endef
 
-ifndef SJDEV
+ifndef STM32DEV
 $(error $n$n=============================================$nSTM32 environment variables not set.$nPLEASE run "source env.sh"$n=============================================$n$n)
 endif
 
@@ -61,7 +61,6 @@ CFLAGS = -mcpu=cortex-m7 \
 	-I"L4_IO" \
 	-I"L5_Application" \
 	-I"L5_Assembly" \
-	-I"$(DBC_DIR)" \
 	-MMD -MP -c
 
 LINKFLAGS = -mcpu=cortex-m7 \
@@ -70,7 +69,7 @@ LINKFLAGS = -mcpu=cortex-m7 \
 	-Os -mthumb \
 	-fmessage-length=0 -ffunction-sections -fdata-sections \
 	-Wall -Wshadow -Wlogical-op -Wfloat-equal \
-	-T $(LIB_DIR)/loader.ld \
+	-T $(LIB_DIR_H7XX)//loader.ld \
 	-nostartfiles \
 	-Xlinker \
 	--gc-sections -Wl,-Map,"$(MAP)" \
@@ -133,9 +132,9 @@ default:
 	@echo "    cleaninstall  - cleans, builds and installs firmware"
 	@echo "    show-obj-list - Shows all object files that will be compiled"
 
-build: $(DBC_DIR) $(OBJ_DIR) $(BIN_DIR) $(SIZE) $(LIST) $(BINARY) $(HEX)
+build: $(OBJ_DIR) $(BIN_DIR) $(SIZE) $(LIST) $(BINARY) $(HEX)
 
-sym-build: $(DBC_DIR) $(OBJ_DIR) $(BIN_DIR) $(SYMBOLS_SIZE) $(SYMBOLS_LIST) $(SYMBOLS_HEX)
+sym-build: $(OBJ_DIR) $(BIN_DIR) $(SYMBOLS_SIZE) $(SYMBOLS_LIST) $(SYMBOLS_HEX)
 
 cleaninstall: clean build flash
 
@@ -236,7 +235,7 @@ $(SYMBOLS): $(EXECUTABLE)
 	@echo 'Finished building: $@'
 	@echo ' '
 
-$(EXECUTABLE): $(DBC_BUILD) $(OBJECT_FILES)
+$(EXECUTABLE): $(OBJECT_FILES)
 	@echo 'Invoking: Cross ARM C++ Linker'
 	@mkdir -p "$(dir $@)"
 	@$(CPPC) $(LINKFLAGS) -o "$@" $(OBJECT_FILES)
@@ -299,7 +298,7 @@ $(BIN_DIR):
 	mkdir $(BIN_DIR)
 
 clean:
-	rm -fR $(OBJ_DIR) $(BIN_DIR) $(DBC_DIR)
+	rm -fR $(OBJ_DIR) $(BIN_DIR) 
 
 flash: build
 	bash -c "\
