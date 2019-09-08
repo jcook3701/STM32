@@ -3,22 +3,22 @@
 # TODO: Set this from the directory this makefile is stored in
 PROJ 			?= firmware
 # Affects what DBC is generated for SJSUOne board
-ENTITY 			?= DBG
+ENTITY			?= DBG
 
 # IMPORTANT: Must be accessible via the PATH variable!!!
-CC              = arm-none-eabi-gcc
-CPPC            = arm-none-eabi-g++
-OBJDUMP         = arm-none-eabi-objdump
-SIZEC           = arm-none-eabi-size
-OBJCOPY         = arm-none-eabi-objcopy
-NM 		        = arm-none-eabi-nm
+CC			= arm-none-eabi-gcc
+CPPC			= arm-none-eabi-g++
+OBJDUMP			= arm-none-eabi-objdump
+SIZEC			= arm-none-eabi-size
+OBJCOPY			= arm-none-eabi-objcopy
+NM	        	= arm-none-eabi-nm
 
 # Internal build directories
 OBJ_DIR			= build/obj
 BIN_DIR			= build/bin
-DBC_DIR			= build/_can_dbc
-LIB_DIR 		= $(SJLIBDIR)
-LIB_DBC_DIR		= $(LIB_DIR)/_can_dbc
+LIB_DIR_H7XX		= $(STM32_H7XX_LIBDIR)
+LIB_DIR_L4XX		= $(STM32_L4XX_LIBDIR)
+
 
 define n
 
@@ -26,44 +26,47 @@ define n
 endef
 
 ifndef SJDEV
-$(error $n$n=============================================$nSJSUOne environment variables not set.$nPLEASE run "source env.sh"$n=============================================$n$n)
+$(error $n$n=============================================$nSTM32 environment variables not set.$nPLEASE run "source env.sh"$n=============================================$n$n)
 endif
 
-CFLAGS = -mcpu=cortex-m3 \
-	-D DISABLE_WATCHDOG\
-    -mthumb -g -Os -fmessage-length=0 \
-    -ffunction-sections -fdata-sections \
-    -Wall -Wshadow -Wlogical-op \
-    -Wfloat-equal -DBUILD_CFG_MPU=0 \
-    -fabi-version=0 \
-    -fno-exceptions \
-    -I"$(LIB_DIR)/" \
-    -I"$(LIB_DIR)/newlib" \
-    -I"$(LIB_DIR)/L0_LowLevel" \
-    -I"$(LIB_DIR)/L1_FreeRTOS" \
-    -I"$(LIB_DIR)/L1_FreeRTOS/trace" \
-    -I"$(LIB_DIR)/L1_FreeRTOS/include" \
-    -I"$(LIB_DIR)/L1_FreeRTOS/portable" \
-    -I"$(LIB_DIR)/L1_FreeRTOS/portable/no_mpu" \
-    -I"$(LIB_DIR)/L2_Drivers" \
-    -I"$(LIB_DIR)/L2_Drivers/base" \
-    -I"$(LIB_DIR)/L3_Utils" \
-    -I"$(LIB_DIR)/L3_Utils/tlm" \
-    -I"$(LIB_DIR)/L4_IO" \
-    -I"$(LIB_DIR)/L4_IO/fat" \
-    -I"$(LIB_DIR)/L4_IO/wireless" \
-    -I"$(LIB_DIR)/L5_HighLevel" \
-    -I"$(LIB_DIR)/L5_Application" \
-    -I"$(LIB_DIR)/L5_Assembly" \
-    -I"L2_Drivers" \
-    -I"L3_Utils" \
-    -I"L4_IO" \
-    -I"L5_Application" \
-    -I"L5_Assembly" \
-    -I"$(DBC_DIR)" \
-    -MMD -MP -c
+CFLAGS = -mcpu=cortex-m7 \
+	-mfpu= fpv5-sp-d16 \
+	-mfloat-abi=hard \
+	-mthumb -g -Os -fmessage-length=0 \
+	-ffunction-sections -fdata-sections \
+	-Wall -Wshadow -Wlogical-op \
+	-Wfloat-equal \
+	-fabi-version=0 \
+	-fno-exceptions \
+	-I"$(LIB_DIR_H7XX)/" \
+	-I"$(LIB_DIR_H7XX)/Drivers/BSP/STM32H7xx_Nucleo_144" \
+	-I"$(LIB_DIR_H7XX)/Drivers/CMSIS" \
+	-I"$(LIB_DIR_H7XX)/Drivers/STM32H7xx_HAL_Driver" \
+	-I"$(LIB_DIR_H7XX)/" \
+	-I"$(LIB_DIR_H7XX)/" \
+	-I"$(LIB_DIR_H7XX)/" \
+	-I"$(LIB_DIR_H7XX)/" \
+	-I"$(LIB_DIR_H7XX)/" \
+	-I"$(LIB_DIR_H7XX)/" \
+	-I"$(LIB_DIR_H7XX)/" \
+	-I"$(LIB_DIR_H7XX)/" \
+	-I"$(LIB_DIR_H7XX)/" \
+	-I"$(LIB_DIR_H7XX)/" \
+	-I"$(LIB_DIR_H7XX)/" \
+	-I"$(LIB_DIR_H7XX)/" \
+	-I"$(LIB_DIR_H7XX)/" \
+	-I"$(LIB_DIR_H7XX)/" \
+	-I"L2_Drivers" \
+	-I"L3_Utils" \
+	-I"L4_IO" \
+	-I"L5_Application" \
+	-I"L5_Assembly" \
+	-I"$(DBC_DIR)" \
+	-MMD -MP -c
 
-LINKFLAGS = -mcpu=cortex-m3 \
+LINKFLAGS = -mcpu=cortex-m7 \
+	-mfpu= fpv5-sp-d16 \
+	-mfloat-abi=hard \
 	-Os -mthumb \
 	-fmessage-length=0 -ffunction-sections -fdata-sections \
 	-Wall -Wshadow -Wlogical-op -Wfloat-equal \
@@ -73,37 +76,39 @@ LINKFLAGS = -mcpu=cortex-m3 \
 	--gc-sections -Wl,-Map,"$(MAP)" \
 	-specs=nano.specs
 
-DBC_BUILD        	= $(DBC_DIR)/generated_can.h
-LIBRARIES			= $(shell find "$(LIB_DIR)" -name '*.c' -o -name '*.cpp')
-SOURCES				= $(shell find L5_Application L5_Assembly \
- 						 -name '*.c' -o\
-						 -name '*.s' -o \
-						 -name '*.S' -o \
-						 -name '*.cpp' \
-						 -not -path './test/*' \
-						 2> /dev/null)
-COMPILABLES 		= $(LIBRARIES) $(SOURCES)
+# LIBRARIES			= $(shell find "$(LIB_DIR)" -name '*.c' -o -name '*.cpp')
+SOURCES	= $(shell find L5_Application L5_Assembly \
+	-name '*.c' -o\
+	-name '*.s' -o \
+	-name '*.S' -o \
+	-name '*.cpp' \
+	-not -path './test/*' \
+	2> /dev/null)
+
+COMPILABLES = $(LIBRARIES) $(SOURCES)
 
 # $(patsubst %.cpp,%.o, LIST) 		: Replace .cpp -> .o
 # $(patsubst %.c,%.o, LIST)			: Replace .c -> .o
 # $(patsubst src/%,%, LIST) 		: Replace src/path/file.o -> path/file.o
 # $(addprefix $(OBJ_DIR)/, LIST) 	: Add OBJ DIR to path (path/file.o -> obj/path/file.o)
-OBJECT_FILES 		= $(addprefix $(OBJ_DIR)/, \
-						$(patsubst %.S,%.o, \
-							$(patsubst %.s,%.o, \
-								$(patsubst %.c,%.o, \
-									$(patsubst %.cpp,%.o, \
-										$(COMPILABLES) \
-									) \
-								) \
-							) \
+
+OBJECT_FILES = 	$(addprefix $(OBJ_DIR)/, \
+			$(patsubst %.S,%.o, \
+				$(patsubst %.s,%.o, \
+					$(patsubst %.c,%.o, \
+						$(patsubst %.cpp,%.o, \
+							$(COMPILABLES) \
 						) \
-					)
-EXECUTABLE			    = $(BIN_DIR)/$(PROJ).elf
-SYMBOL_TABLE 		    = $(BIN_DIR)/symbol-table.c
+					) \
+				) \
+			) \
+		)
+
+EXECUTABLE	    = $(BIN_DIR)/$(PROJ).elf
+SYMBOL_TABLE	    = $(BIN_DIR)/symbol-table.c
 BINARY              = $(EXECUTABLE:.elf=.bin)
 HEX                 = $(EXECUTABLE:.elf=.hex)
-SYMBOLS_HEX			    = $(EXECUTABLE:.elf=.symbols.hex)
+SYMBOLS_HEX	    = $(EXECUTABLE:.elf=.symbols.hex)
 LIST                = $(EXECUTABLE:.elf=.lst)
 SYMBOLS_LIST        = $(EXECUTABLE:.elf=.symbols.lst)
 SIZE                = $(EXECUTABLE:.elf=.siz)
@@ -284,12 +289,6 @@ $(OBJ_DIR)/%.o: $(LIB_DIR)/%.c
 	@$(CC) $(CFLAGS) -std=gnu11 -MF"$(@:%.o=%.d)" -MT"$(@)" -o "$@" "$<"
 	@echo 'Finished building: $<'
 	@echo ' '
-
-$(DBC_BUILD):
-	python2.7 "$(LIB_DBC_DIR)/dbc_parse.py" -i "$(LIB_DBC_DIR)/243.dbc" -s $(ENTITY) > $(DBC_BUILD)
-
-$(DBC_DIR):
-	mkdir -p $(DBC_DIR)
 
 $(OBJ_DIR):
 	@echo 'Creating Objects Folder: $<'

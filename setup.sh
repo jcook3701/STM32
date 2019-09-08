@@ -7,7 +7,7 @@
 # Make sure only non-root users can run our script
 if [[ $EUID -eq 0 ]]
 then
-    echo "ESP32 installer script must NOT be run as root! " 1>&2
+    echo "STM32 installer script must NOT be run as root! " 1>&2
     exit 1
 fi
 
@@ -29,7 +29,7 @@ ARM_GCC=gcc-arm-none-eabi-8-2019-q3-update
 
 echo " ──────────────────────────────────────────────────┐"
 echo ""
-echo "  Starting ESP32-DEV-Linux Environment Setup Script  "
+echo "  Starting STM32-DEV-Linux Environment Setup Script  "
 echo ""
 echo "└────────────────────────────────────────────────── "
 sleep 1
@@ -48,7 +48,7 @@ cd $TOOLDIR
 case "$OS" in
     Linux) # Debian Linux Case
 	echo "Operating System: Linux"
-	ESPDEV=/dev/ttyUSB0
+	STMDEV=/dev/ttyUSB0
         echo " ───────────────────────────────────────────────────┐"
         echo "               Updating Apt listings                 "
         echo "└─────────────────────────────────────────────────── "
@@ -83,7 +83,7 @@ case "$OS" in
     
     Darwin) # OS X Case
 	echo "Operating System: Mac OSX Darwin"
-	ESPDEV=/dev/tty.usbserial-A503JOLS
+	STMDEV=/dev/tty.usbserial-A503JOLS
         echo " ───────────────────────────────────────────────────┐"
         echo "    Install XCode Command Line Tools (GCC, make)     "
         echo "└─────────────────────────────────────────────────── "
@@ -121,27 +121,29 @@ echo "└───────────────────────�
 cat > env.sh <<EOL
 #!/bin/bash
 # Setup a base directory:
-ESP32BASE=$BASE
-# ESP32 Board Settings:
-ESP32DEV=$ESPDEV # Set this to your board ID
-ESP32BAUD=38400
+STM32BASE=$BASE
+# STM32 Board Settings:
+STM32DEV=$STMDEV # Set this to your board ID
+STM32BAUD=38400
 # Project Target Settings:
 # Sets the binary name, defaults to "firmware" (Optional)
-ESP32PROJ=firmware
+STM32PROJ=firmware
 # Sets which DBC to generate, defaults to "DBG"
 ENTITY=DBG
 # Compiler and library settings:
 # Selects compiler version to use
-PATH=\$PATH:\$ESP32BASE/tools/gcc-arm-none-eabi-8-2019-q3-update/bin
-ESP32LIBDIR="\$ESP32BASE/firmware/lib"
+PATH=\$PATH:\$STM32BASE/tools/gcc-arm-none-eabi-8-2019-q3-update/bin
+STM32_H7XX_LIBDIR="\$STM32BASE/firmware/stm32L432/lib"
+STM32_L4XX_LIBDIR="\$STM32BASE/firmware/stm32H743/lib"
 # Export everything to the environment
-export ESP32BASE
-export ESP32DEV
-export ESP32BAUD
-export ESP32PROJ
+export STM32BASE
+export STM32DEV
+export STM32BAUD
+export STM32PROJ
 export ENTITY
 export PATH
-export ESP32LIBDIR
+export STM32_H7XX_LIBDIR
+export STM32_L4XX_LIBDIR
 EOL
 
 echo " ───────────────────────────────────────────────────┐"
@@ -154,5 +156,5 @@ echo "                   SETUP COMPLETE!                   "
 echo "                                                     "
 echo " IF THIS IS YOUR FIRST TIME RUNNING THE SETUP SCRIPT "
 echo "             PLEASE RESTART YOUR SYSTEM              "
-echo "         TO LOAD CODE INTO YOUR ESP32 BOARD          "
+echo "         TO LOAD CODE INTO YOUR STM32 BOARD          "
 echo "└─────────────────────────────────────────────────── "
