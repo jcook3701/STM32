@@ -19,7 +19,7 @@ then
 fi
 # DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )/../" && pwd )
 # PROJECTS=(${ESP32BASE}/firmware/Starter/ ${ESP32BASE}/firmware/examples/*/)
-PROJECTS=(${ESP32BASE}/firmware/examples/*/)
+PROJECTS=(${ESP32BASE}/firmware/stm32H743/examples/*/ ${ESP32BASE}/firmware/stm32L432/examples/*/)
 for PROJECT in ${PROJECTS[@]}
 do
     echo "Creating link for: $PROJECT/env.sh"
