@@ -19,9 +19,7 @@ BIN_DIR			= build/bin
 LIB_DIR_H7XX		= $(STM32_H7XX_LIBDIR)
 LIB_DIR_L4XX		= $(STM32_L4XX_LIBDIR)
 
-
 define n
-
 
 endef
 
@@ -30,7 +28,7 @@ $(error $n$n=============================================$nSTM32 environment var
 endif
 
 CFLAGS = -mcpu=cortex-m7 \
-	-mfpu= fpv5-sp-d16 \
+	-mfpu=fpv5-sp-d16 \
 	-mfloat-abi=hard \
 	-mthumb -g -Os -fmessage-length=0 \
 	-ffunction-sections -fdata-sections \
@@ -45,8 +43,9 @@ CFLAGS = -mcpu=cortex-m7 \
 	-I"$(LIB_DIR_H7XX)/Drivers/CMSIS/Include" \
 	-I"$(LIB_DIR_H7XX)/Drivers/STM32H7xx_HAL_Driver/Inc" \
 	-I"$(LIB_DIR_H7XX)/Middlewares/FreeRTOS/Source/include" \
-	-I"$(LIB_DIR_H7XX)/Middlewares/FreeRTOS/Source/CMSIS_RTOS" \\
-	-I"$(LIB_DIR_H7XX)/Middlewares/LwIP/src/apps/httpd/" \
+	-I"$(LIB_DIR_H7XX)/Middlewares/FreeRTOS/Source/portable/GCC/ARM_CM4F" \
+	-I"$(LIB_DIR_H7XX)/Middlewares/FreeRTOS/Source/CMSIS_RTOS" \
+	-I"$(LIB_DIR_H7XX)/Middlewares/LwIP/src/apps/httpd" \
 	-I"$(LIB_DIR_H7XX)/Middlewares/LwIP/src/include/lwip" \
 	-I"$(LIB_DIR_H7XX)/Middlewares/LwIP/src/include/lwip/apps" \
 	-I"$(LIB_DIR_H7XX)/Middlewares/LwIP/src/include/lwip/priv" \
@@ -57,13 +56,13 @@ CFLAGS = -mcpu=cortex-m7 \
 	-I"$(LIB_DIR_H7XX)/Middlewares/LwIP/src/include/posix" \
 	-I"$(LIB_DIR_H7XX)/Middlewares/LwIP/src/include/posix/sys" \
 	-I"$(LIB_DIR_H7XX)/Middlewares/LwIP/system/arch" \
-	-I"$(LIB_DIR_H7XX)/Middlewares/mbedTLS/" \
+	-I"$(LIB_DIR_H7XX)/Middlewares/mbedTLS" \
 	-I"application" \
 	-I"application/lib" \
 	-MMD -MP -c
 
 LINKFLAGS = -mcpu=cortex-m7 \
-	-mfpu= fpv5-sp-d16 \
+	-mfpu=fpv5-sp-d16 \
 	-mfloat-abi=hard \
 	-Os -mthumb \
 	-fmessage-length=0 -ffunction-sections -fdata-sections \
@@ -76,7 +75,79 @@ LINKFLAGS = -mcpu=cortex-m7 \
 
 # LIBRARIES = $(shell find "$(LIB_DIR)" -name '*.c' -o -name '*.cpp')
 
-# LIBRARIES = $(LIB_DIR_H7XX) 
+LIBRARIES = $(LIB_DIR_H7XX)/Middlewares/FreeRTOS/Source/portable/MemMang/heap_4.c \
+	$(LIB_DIR_H7XX)/Middlewares/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c \
+	$(LIB_DIR_H7XX)/Middlewares/FreeRTOS/Source/portable/RVDS/ARM_CM4F/port.c \
+	$(LIB_DIR_H7XX)/Middlewares/LwIP/src/netif/ethernet.c \
+	$(LIB_DIR_H7XX)/Middlewares/LwIP/system/OS/sys_arch.c \
+	$(LIB_DIR_H7XX)/Drivers/BSP/Components/lan8742/lan8742.c \
+	$(LIB_DIR_H7XX)/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rcc.c \
+	$(LIB_DIR_H7XX)/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_tim_ex.c \
+	$(LIB_DIR_H7XX)/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_sdram.c \
+	$(LIB_DIR_H7XX)/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_i2c_ex.c \
+	$(LIB_DIR_H7XX)/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_ltdc.c \
+	$(LIB_DIR_H7XX)/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_gpio.c \
+	$(LIB_DIR_H7XX)/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_flash.c \
+	$(LIB_DIR_H7XX)/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_eth_ex.c \
+	$(LIB_DIR_H7XX)/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_cortex.c \
+	$(LIB_DIR_H7XX)/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_tim.c \
+	$(LIB_DIR_H7XX)/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rcc_ex.c \
+	$(LIB_DIR_H7XX)/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_pwr.c \
+	$(LIB_DIR_H7XX)/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_i2c.c \
+	$(LIB_DIR_H7XX)/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_mdma.c \
+	$(LIB_DIR_H7XX)/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_eth.c \
+	$(LIB_DIR_H7XX)/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_dma.c \
+	$(LIB_DIR_H7XX)/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_flash_ex.c \
+	$(LIB_DIR_H7XX)/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_ll_fmc.c \
+	$(LIB_DIR_H7XX)/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_dma2d.c \
+	$(LIB_DIR_H7XX)/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart.c \
+	$(LIB_DIR_H7XX)/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_adc_ex.c \
+	$(LIB_DIR_H7XX)/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal.c \
+	$(LIB_DIR_H7XX)/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_adc.c \
+	$(LIB_DIR_H7XX)/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_pwr_ex.c \
+	$(LIB_DIR_H7XX)/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart_ex.c \
+	$(LIB_DIR_H7XX)/Middlewares/LwIP/src/apps/httpd/httpd.c \
+	$(LIB_DIR_H7XX)/Middlewares/LwIP/src/apps/httpd/fs.c \
+	$(LIB_DIR_H7XX)/Middlewares/LwIP/src/core/ipv4/ip4.c \
+	$(LIB_DIR_H7XX)/Middlewares/LwIP/src/core/ipv4/ip4_frag.c \
+	$(LIB_DIR_H7XX)/Middlewares/LwIP/src/core/ipv4/etharp.c \
+	$(LIB_DIR_H7XX)/Middlewares/LwIP/src/core/ipv4/icmp.c \
+	$(LIB_DIR_H7XX)/Middlewares/LwIP/src/core/ipv4/ip4_addr.c \
+	$(LIB_DIR_H7XX)/Middlewares/LwIP/src/core/ipv4/igmp.c \
+	$(LIB_DIR_H7XX)/Middlewares/LwIP/src/core/ipv4/dhcp.c \
+	$(LIB_DIR_H7XX)/Middlewares/LwIP/src/core/ipv4/autoip.c \
+	$(LIB_DIR_H7XX)/Middlewares/LwIP/src/api/err.c \
+	$(LIB_DIR_H7XX)/Middlewares/LwIP/src/api/netdb.c \
+	$(LIB_DIR_H7XX)/Middlewares/LwIP/src/api/tcpip.c \
+	$(LIB_DIR_H7XX)/Middlewares/LwIP/src/api/netifapi.c \
+	$(LIB_DIR_H7XX)/Middlewares/LwIP/src/api/netbuf.c \
+	$(LIB_DIR_H7XX)/Middlewares/LwIP/src/api/api_lib.c \
+	$(LIB_DIR_H7XX)/Middlewares/LwIP/src/api/api_msg.c \
+	$(LIB_DIR_H7XX)/Middlewares/LwIP/src/api/sockets.c \
+	$(LIB_DIR_H7XX)/Drivers/BSP/STM32H7xx_Nucleo_144/stm32h7xx_nucleo_144.c \
+	$(LIB_DIR_H7XX)/Middlewares/FreeRTOS/Source/queue.c \
+	$(LIB_DIR_H7XX)/Middlewares/FreeRTOS/Source/timers.c \
+	$(LIB_DIR_H7XX)/Middlewares/FreeRTOS/Source/tasks.c \
+	$(LIB_DIR_H7XX)/Middlewares/FreeRTOS/Source/list.c \
+	$(LIB_DIR_H7XX)/Middlewares/FreeRTOS/Source/croutine.c \
+	$(LIB_DIR_H7XX)/Middlewares/LwIP/src/core/tcp_out.c \
+	$(LIB_DIR_H7XX)/Middlewares/LwIP/src/core/inet_chksum.c \
+	$(LIB_DIR_H7XX)/Middlewares/LwIP/src/core/tcp.c \
+	$(LIB_DIR_H7XX)/Middlewares/LwIP/src/core/init.c \
+	$(LIB_DIR_H7XX)/Middlewares/LwIP/src/core/udp.c \
+	$(LIB_DIR_H7XX)/Middlewares/LwIP/src/core/dns.c \
+	$(LIB_DIR_H7XX)/Middlewares/LwIP/src/core/netif.c \
+	$(LIB_DIR_H7XX)/Middlewares/LwIP/src/core/mem.c \
+	$(LIB_DIR_H7XX)/Middlewares/LwIP/src/core/raw.c \
+	$(LIB_DIR_H7XX)/Middlewares/LwIP/src/core/def.c \
+	$(LIB_DIR_H7XX)/Middlewares/LwIP/src/core/stats.c \
+	$(LIB_DIR_H7XX)/Middlewares/LwIP/src/core/pbuf.c \
+	$(LIB_DIR_H7XX)/Middlewares/LwIP/src/core/sys.c \
+	$(LIB_DIR_H7XX)/Middlewares/LwIP/src/core/timeouts.c \
+	$(LIB_DIR_H7XX)/Middlewares/LwIP/src/core/tcp_in.c \
+	$(LIB_DIR_H7XX)/Middlewares/LwIP/src/core/memp.c \
+	$(LIB_DIR_H7XX)/Middlewares/LwIP/src/core/ip.c
+
 
 SOURCES	= $(shell find application/src \
 	-name '*.c' -o\
@@ -133,7 +204,8 @@ default:
 	@echo "    cleaninstall  - cleans, builds and installs firmware"
 	@echo "    show-obj-list - Shows all object files that will be compiled"
 
-build: $(OBJ_DIR) $(BIN_DIR) $(SIZE) $(LIST) $(BINARY) $(HEX)
+# $(BINARY)
+build: $(OBJ_DIR) $(BIN_DIR) $(SIZE) $(LIST) $(HEX)
 
 sym-build: $(OBJ_DIR) $(BIN_DIR) $(SYMBOLS_SIZE) $(SYMBOLS_LIST) $(SYMBOLS_HEX)
 
@@ -292,19 +364,16 @@ $(OBJ_DIR)/%.o: $(LIB_DIR)/%.c
 
 $(OBJ_DIR):
 	@echo 'Creating Objects Folder: $<'
-	mkdir $(OBJ_DIR)
+	mkdir -p $(OBJ_DIR)
 
 $(BIN_DIR):
 	@echo 'Creating Binary Folder: $<'
-	mkdir $(BIN_DIR)
+	mkdir -p $(BIN_DIR)
 
 clean:
 	rm -fR $(OBJ_DIR) $(BIN_DIR) 
 
-flash: build
+flash: # build
 	bash -c "\
-	"
-
-telemetry:
-	@bash -c "\
+	java -jar $(STM32BASE)/tools/stsw-link007/AllPlatforms/./STLinkUpgrade.jar \
 	"
