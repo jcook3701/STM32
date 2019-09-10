@@ -27,9 +27,18 @@ ifndef STM32DEV
 $(error $n$n=============================================$nSTM32 environment variables not set.$nPLEASE run "source env.sh"$n=============================================$n$n)
 endif
 
+# 	-fsingle-precision-constant \
+	-mlittle-endian
+
+# fpv5-sp-d16
+# 	-nostdlib
 CFLAGS = -mcpu=cortex-m7 \
-	-mfpu=fpv5-sp-d16 \
+	-mfpu=fpv5-d16 \
 	-mfloat-abi=hard \
+	-mlittle-endian \
+	-D STM32H743xx \
+	-D USE_HAL_DRIVER \
+	-D USE_STM32H7XX_NUCLEO_144_MB1364 \
 	-mthumb -g -Os -fmessage-length=0 \
 	-ffunction-sections -fdata-sections \
 	-Wall -Wshadow -Wlogical-op \
@@ -38,14 +47,24 @@ CFLAGS = -mcpu=cortex-m7 \
 	-fno-exceptions \
 	-I"$(LIB_DIR_H7XX)/" \
 	-I"$(LIB_DIR_H7XX)/Drivers/BSP/STM32H7xx_Nucleo_144" \
+	-I"$(LIB_DIR_H7XX)/Drivers/BSP/Components/" \
+	-I"$(LIB_DIR_H7XX)/Drivers/BSP/Components/lan8742" \
+	-I"$(LIB_DIR_H7XX)/Drivers/BSP/Components/Common" \
 	-I"$(LIB_DIR_H7XX)/Drivers/CMSIS/Device/ST/STM32H7xx/Include" \
 	-I"$(LIB_DIR_H7XX)/Drivers/CMSIS/DSP/Include" \
 	-I"$(LIB_DIR_H7XX)/Drivers/CMSIS/Include" \
 	-I"$(LIB_DIR_H7XX)/Drivers/STM32H7xx_HAL_Driver/Inc" \
+	-I"$(LIB_DIR_H7XX)/Middlewares/FreeRTOS/Source" \
 	-I"$(LIB_DIR_H7XX)/Middlewares/FreeRTOS/Source/include" \
 	-I"$(LIB_DIR_H7XX)/Middlewares/FreeRTOS/Source/portable/GCC/ARM_CM4F" \
 	-I"$(LIB_DIR_H7XX)/Middlewares/FreeRTOS/Source/CMSIS_RTOS" \
+	-I"$(LIB_DIR_H7XX)/Middlewares/LwIP" \
+	-I"$(LIB_DIR_H7XX)/Middlewares/LwIP/src/api" \
+	-I"$(LIB_DIR_H7XX)/Middlewares/LwIP/src/apps" \
 	-I"$(LIB_DIR_H7XX)/Middlewares/LwIP/src/apps/httpd" \
+	-I"$(LIB_DIR_H7XX)/Middlewares/LwIP/src/core" \
+	-I"$(LIB_DIR_H7XX)/Middlewares/LwIP/src/core/ipv4" \
+	-I"$(LIB_DIR_H7XX)/Middlewares/LwIP/src/include" \
 	-I"$(LIB_DIR_H7XX)/Middlewares/LwIP/src/include/lwip" \
 	-I"$(LIB_DIR_H7XX)/Middlewares/LwIP/src/include/lwip/apps" \
 	-I"$(LIB_DIR_H7XX)/Middlewares/LwIP/src/include/lwip/priv" \
@@ -55,20 +74,32 @@ CFLAGS = -mcpu=cortex-m7 \
 	-I"$(LIB_DIR_H7XX)/Middlewares/LwIP/src/include/netif/ppp/polarssl" \
 	-I"$(LIB_DIR_H7XX)/Middlewares/LwIP/src/include/posix" \
 	-I"$(LIB_DIR_H7XX)/Middlewares/LwIP/src/include/posix/sys" \
+	-I"$(LIB_DIR_H7XX)/Middlewares/LwIP/system" \
 	-I"$(LIB_DIR_H7XX)/Middlewares/LwIP/system/arch" \
 	-I"$(LIB_DIR_H7XX)/Middlewares/mbedTLS" \
+	-I"$(LIB_DIR_H7XX)/Utilities" \
 	-I"application" \
 	-I"application/lib" \
 	-MMD -MP -c
 
+# 	-fsingle-precision-constant \
+	-mlittle-endian
+#	-specs=nano.specs
+#	-specs=nosys.specs
+#	fpv5-sp-d16
+#	-lgcc
+# 	-nostdlib
+#	-nostartfiles 
+# 	--gc-sections -Wl,-Map,"$(MAP)"
+
 LINKFLAGS = -mcpu=cortex-m7 \
-	-mfpu=fpv5-sp-d16 \
+	-mfpu=fpv5-d16 \
 	-mfloat-abi=hard \
+	-mlittle-endian \
 	-Os -mthumb \
 	-fmessage-length=0 -ffunction-sections -fdata-sections \
 	-Wall -Wshadow -Wlogical-op -Wfloat-equal \
 	-T $(LIB_DIR_H7XX)/SW4STM32/STM32H743ZI_Nucleo/STM32H743ZITx_FLASH.ld \
-	-nostartfiles \
 	-Xlinker \
 	--gc-sections -Wl,-Map,"$(MAP)" \
 	-specs=nano.specs
@@ -77,7 +108,7 @@ LINKFLAGS = -mcpu=cortex-m7 \
 
 LIBRARIES = $(LIB_DIR_H7XX)/Middlewares/FreeRTOS/Source/portable/MemMang/heap_4.c \
 	$(LIB_DIR_H7XX)/Middlewares/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c \
-	$(LIB_DIR_H7XX)/Middlewares/FreeRTOS/Source/portable/RVDS/ARM_CM4F/port.c \
+	$(LIB_DIR_H7XX)/Middlewares/FreeRTOS/Source/portable/GCC/ARM_CM4F/port.c \
 	$(LIB_DIR_H7XX)/Middlewares/LwIP/src/netif/ethernet.c \
 	$(LIB_DIR_H7XX)/Middlewares/LwIP/system/OS/sys_arch.c \
 	$(LIB_DIR_H7XX)/Drivers/BSP/Components/lan8742/lan8742.c \
@@ -146,11 +177,12 @@ LIBRARIES = $(LIB_DIR_H7XX)/Middlewares/FreeRTOS/Source/portable/MemMang/heap_4.
 	$(LIB_DIR_H7XX)/Middlewares/LwIP/src/core/timeouts.c \
 	$(LIB_DIR_H7XX)/Middlewares/LwIP/src/core/tcp_in.c \
 	$(LIB_DIR_H7XX)/Middlewares/LwIP/src/core/memp.c \
-	$(LIB_DIR_H7XX)/Middlewares/LwIP/src/core/ip.c
-
+	$(LIB_DIR_H7XX)/Middlewares/LwIP/src/core/ip.c \
+	$(LIB_DIR_H7XX)/SW4STM32/startup_stm32h743xx.s \
+	$(LIB_DIR_H7XX)/SW4STM32/syscalls.c
 
 SOURCES	= $(shell find application/src \
-	-name '*.c' -o\
+	-name '*.c' -o \
 	-name '*.s' -o \
 	-name '*.S' -o \
 	-name '*.cpp' \
@@ -204,8 +236,8 @@ default:
 	@echo "    cleaninstall  - cleans, builds and installs firmware"
 	@echo "    show-obj-list - Shows all object files that will be compiled"
 
-# $(BINARY)
-build: $(OBJ_DIR) $(BIN_DIR) $(SIZE) $(LIST) $(HEX)
+
+build: $(OBJ_DIR) $(BIN_DIR) $(SIZE) $(LIST) $(BINARY) $(HEX)
 
 sym-build: $(OBJ_DIR) $(BIN_DIR) $(SYMBOLS_SIZE) $(SYMBOLS_LIST) $(SYMBOLS_HEX)
 
