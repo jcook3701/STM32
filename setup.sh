@@ -126,15 +126,22 @@ esac
 echo " ──────────────────────────────────────────────────┐"
 echo "            Extracting gcc-arm-embedded             "
 echo "└────────────────────────────────────────────────── "
+if [ ! -d "./gcc-arm-none-eabi-8-2019-q3-update" ]
+then
 tar --extract \
     --verbose \
     --bzip2 \
     --file=$GCC_PKG\
     --exclude='share/doc' 2> /dev/null
+fi
 echo " ──────────────────────────────────────────────────┐"
 echo "            Extracting en.stsw-link007              "
 echo "└────────────────────────────────────────────────── "
-unzip en.stsw-link007.zip
+
+if [ ! -d "./stsw-link007/" ]
+then
+    unzip en.stsw-link007.zip
+fi
 
 # Return Back to Head of this repository.
 cd $BASE
