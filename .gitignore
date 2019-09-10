@@ -1,7 +1,7 @@
 # firmware/*
-# firmware/**/bin
-# firmware/**/obj
-# firmware/**/makefile
+firmware/**/bin
+firmware/**/obj
+firmware/**/makefile
 # firmware/**/test-suite
 # firmware/**/_can_dbc/*
 # firmware/**/cgreen-test-suite
