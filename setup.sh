@@ -149,7 +149,7 @@ cd $BASE
 echo " ───────────────────────────────────────────────────┐"
 echo "          Generating Environment Variables           "
 echo "└─────────────────────────────────────────────────── "
-cat > env.sh <<EOL
+cat > ENV.sh <<EOL
 #!/bin/bash
 # Setup a base directory:
 STM32BASE=$BASE
@@ -180,7 +180,7 @@ EOL
 echo " ───────────────────────────────────────────────────┐"
 echo "      Linking Files to Firmware Project Folder       "
 echo "└─────────────────────────────────────────────────── "
-source env.sh
+source ENV.sh
 ./tools/link_projects.sh
 echo " ───────────────────────────────────────────────────┐"
 echo "                   SETUP COMPLETE!                   "

@@ -24,13 +24,13 @@ define n
 endef
 
 ifndef STM32DEV
-$(error $n$n=============================================$nSTM32 environment variables not set.$nPLEASE run "source env.sh"$n=============================================$n$n)
+$(error $n$n=============================================$nSTM32 environment variables not set.$nPLEASE run "source ENV.sh"$n=============================================$n$n)
 endif
 
-# 	-fsingle-precision-constant \
-	-mlittle-endian
-
-# fpv5-sp-d16
+#######################################################################################################
+# Head Note: Old linker flags that Might be needed for another project.
+#######################################################################################################
+#	-mfpu=fpv5-sp-d16
 # 	-nostdlib
 CFLAGS = -mcpu=cortex-m7 \
 	-mfpu=fpv5-d16 \
@@ -82,16 +82,18 @@ CFLAGS = -mcpu=cortex-m7 \
 	-I"application/lib" \
 	-MMD -MP -c
 
-# 	-fsingle-precision-constant \
-	-mlittle-endian
+#######################################################################################################
+# Head Note: Old linker flags that Might be needed for another project.
+#######################################################################################################
+# Note: -specs=nosys.specs should be used if there is no syscalls.c file. If there is a syscalls.c file
+#       then -specs=nano.specs flag should be used.
 #	-specs=nano.specs
 #	-specs=nosys.specs
-#	fpv5-sp-d16
-#	-lgcc
+# Note: This could be the correct mfpu however I will need to check that out later.
+#	-mfpu=fpv5-sp-d16
+# Note: I have problems linking the libc _init until I removed these flags.
 # 	-nostdlib
 #	-nostartfiles 
-# 	--gc-sections -Wl,-Map,"$(MAP)"
-
 LINKFLAGS = -mcpu=cortex-m7 \
 	-mfpu=fpv5-d16 \
 	-mfloat-abi=hard \
@@ -103,8 +105,6 @@ LINKFLAGS = -mcpu=cortex-m7 \
 	-Xlinker \
 	--gc-sections -Wl,-Map,"$(MAP)" \
 	-specs=nano.specs
-
-# LIBRARIES = $(shell find "$(LIB_DIR)" -name '*.c' -o -name '*.cpp')
 
 LIBRARIES = $(LIB_DIR_H7XX)/Middlewares/FreeRTOS/Source/portable/MemMang/heap_4.c \
 	$(LIB_DIR_H7XX)/Middlewares/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c \
@@ -190,11 +190,6 @@ SOURCES	= $(shell find application/src \
 	2> /dev/null)
 
 COMPILABLES = $(LIBRARIES) $(SOURCES)
-
-# $(patsubst %.cpp,%.o, LIST) 		: Replace .cpp -> .o
-# $(patsubst %.c,%.o, LIST)			: Replace .c -> .o
-# $(patsubst src/%,%, LIST) 		: Replace src/path/file.o -> path/file.o
-# $(addprefix $(OBJ_DIR)/, LIST) 	: Add OBJ DIR to path (path/file.o -> obj/path/file.o)
 
 OBJECT_FILES = 	$(addprefix $(OBJ_DIR)/, \
 			$(patsubst %.S,%.o, \

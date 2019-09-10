@@ -2,16 +2,12 @@
 firmware/**/bin
 firmware/**/obj
 firmware/**/makefile
-# firmware/**/test-suite
-# firmware/**/_can_dbc/*
-# firmware/**/cgreen-test-suite
+firmware/**/Makefile
 
 # !firmware/lib
 # !firmware/examples
 # !firmware/Starter
 
-tools/Hyperload/modules/
-tools/Telemetry
 tools/gcc-arm-none-eabi-*
 tools/stsw-link007
 
@@ -19,5 +15,7 @@ tools/stsw-link007
 **/.DS_Store
 **/flash.txt
 **/env.sh
+**/Env.sh
+
 .idea/
 firmware/**/test

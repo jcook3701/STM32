@@ -22,12 +22,10 @@ fi
 PROJECTS=(${STM32BASE}/firmware/stm32H743/examples/*/ ${STM32BASE}/firmware/stm32L432/examples/*/)
 for PROJECT in ${PROJECTS[@]}
 do
-    echo "Creating link for: $PROJECT/ENV.sh"
-    echo "Creating link for: $PROJECT/Makefile"
+    echo "Removing link for: $PROJECT/ENV.sh"
+    echo "Removing link for: $PROJECT/Makefile"
     # Place ENV.sh link into project folder
     rm -f "$PROJECT/ENV.sh"
-    ln -s -f "${STM32BASE}/ENV.sh" "$PROJECT/ENV.sh"
     # # # # Place makefile link into project folder
     rm -f "$PROJECT/Makefile"
-    ln -s -f "${STM32BASE}/Makefile" "$PROJECT/Makefile"
 done
