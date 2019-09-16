@@ -73,7 +73,7 @@ LINKFLAGS = -mcpu=cortex-m7 \
 	-Os -mthumb \
 	-fmessage-length=0 -ffunction-sections -fdata-sections \
 	-Wall -Wshadow -Wlogical-op -Wfloat-equal \
-	-T $(LIB_DIR_H7XX)/SW4STM32/STM32H743ZI_Nucleo/STM32H743ZITx_FLASH.ld \
+	-T application/SW4STM32/STM32H743ZI_Nucleo/STM32H743ZITx_FLASH.ld \
 	-Xlinker \
 	--gc-sections -Wl,-Map,"$(MAP)" \
 	-specs=nano.specs
@@ -150,9 +150,8 @@ LIBRARIES = $(LIB_DIR_H7XX)/Middlewares/FreeRTOS/Source/portable/MemMang/heap_4.
 	$(LIB_DIR_H7XX)/Middlewares/LwIP/src/core/tcp_in.c \
 	$(LIB_DIR_H7XX)/Middlewares/LwIP/src/core/memp.c \
 	$(LIB_DIR_H7XX)/Middlewares/LwIP/src/core/ip.c \
-	$(LIB_DIR_H7XX)/SW4STM32/startup_stm32h743xx.s \
-	$(LIB_DIR_H7XX)/SW4STM32/syscalls.c
-
+	application/SW4STM32/startup_stm32h743xx.s \
+	application/SW4STM32/syscalls.c
 
 
 

@@ -104,6 +104,7 @@ case "$OS" in
 	else
 	    brew update
 	    brew install libusb
+	    brew install stlink
 	fi
 	echo " ──────────────────────────────────────────────────┐"
 	echo "           Downloading gcc-arm-embedded             "

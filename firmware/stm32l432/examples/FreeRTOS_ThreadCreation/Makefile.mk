@@ -23,17 +23,6 @@ CFLAGS = -mcpu=cortex-m4 \
 	-I"application/lib" \
 	-MMD -MP -c
 
-# Note: Below are old linker flags that Might be needed for another project.
-# Note: -specs=nosys.specs should be used if there is no syscalls.c file. If there is a syscalls.c file
-#       then -specs=nano.specs flag should be used.
-#	-specs=nano.specs
-#	-specs=nosys.specs
-# Note: This could be the correct mfpu however I will need to check that out later.
-#	-mfpu=fpv5-sp-d16
-# Note: I have problems linking the libc _init until I removed these flags.
-# 	-nostdlib
-#	-nostartfiles
-
 LINKFLAGS = -mcpu=cortex-m4 \
 	-mfpu=fpv4-sp-d16 \
 	-mfloat-abi=hard \
@@ -41,7 +30,7 @@ LINKFLAGS = -mcpu=cortex-m4 \
 	-Os -mthumb \
 	-fmessage-length=0 -ffunction-sections -fdata-sections \
 	-Wall -Wshadow -Wlogical-op -Wfloat-equal \
-	-T $(LIB_DIR_L4XX)/SW4STM32/STM32L432KC_NUCLEO/STM32L432KCUx_FLASH.ld \
+	-T application/SW4STM32/STM32L432KC_NUCLEO/STM32L432KCUx_FLASH.ld \
 	-Xlinker \
 	--gc-sections -Wl,-Map,"$(MAP)" \
 	-specs=nano.specs
@@ -64,5 +53,5 @@ LIBRARIES = $(LIB_DIR_L4XX)/Middlewares/FreeRTOS/Source/queue.c \
 	$(LIB_DIR_L4XX)/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_dma.c \
 	$(LIB_DIR_L4XX)/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_cortex.c \
 	$(LIB_DIR_L4XX)/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_tim_ex.c \
-	$(LIB_DIR_L4XX)/SW4STM32/startup_stm32l432xx.s \
-	$(LIB_DIR_L4XX)/SW4STM32/syscalls.c
+	application/SW4STM32/startup_stm32l432xx.s \
+	application/SW4STM32/syscalls.c
