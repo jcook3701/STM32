@@ -53,5 +53,6 @@ LIBRARIES = $(LIB_DIR_L4XX)/Middlewares/FreeRTOS/Source/queue.c \
 	$(LIB_DIR_L4XX)/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_dma.c \
 	$(LIB_DIR_L4XX)/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_cortex.c \
 	$(LIB_DIR_L4XX)/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_tim_ex.c \
-	application/SW4STM32/startup_stm32l432xx.s \
-	application/SW4STM32/syscalls.c
+	application/SW4STM32/startup_stm32l432xx.s
+
+# application/SW4STM32/syscalls.c
