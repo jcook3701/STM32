@@ -117,8 +117,8 @@ a lot of data that needs to be copied, this should be set high. */
 
 
 /* ---------- DHCP options ---------- */
-#define LWIP_DHCP               1
-
+// #define LWIP_DHCP               1
+#define LWIP_DHCP               0
 
 /* ---------- UDP options ---------- */
 #define LWIP_UDP                1
