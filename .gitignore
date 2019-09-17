@@ -10,6 +10,7 @@ firmware/**/Makefile
 
 tools/gcc-arm-none-eabi-*
 tools/stsw-link007
+tools/en.stm32cubeprog
 
 **/.gdb_history
 **/.DS_Store
