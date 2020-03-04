@@ -1,6 +1,6 @@
 # STM32 Project Tools
 
-__Note:__ These tools have been implanted to work for both the STM32H743 & STM32L432 development boards.  
+__Note:__ These tools have been implemented to work for both the STM32H743 & STM32L432 development boards.  
 
 This tool is used to create links to the following folders:  
 1. ${STM32BASE}/firmware/stm32H743/examples/*/  
