@@ -17,8 +17,9 @@ CFLAGS = -mcpu=cortex-m7 \
 	-I"$(LIB_DIR_H7XX)/Drivers/CMSIS/Include" \
 	-I"$(LIB_DIR_H7XX)/Drivers/CMSIS/Device/ST/STM32H7xx/Include" \
 	-I"$(LIB_DIR_H7XX)/Drivers/STM32H7xx_HAL_Driver/Inc" \
-	-I"$(LIB_DIR_H7XX)/Middlewares/FreeRTOS/Source/portable/GCC/ARM_CM4_MPU" \
+	-I"$(LIB_DIR_H7XX)/Middlewares/FreeRTOS/Source" \
 	-I"$(LIB_DIR_H7XX)/Middlewares/FreeRTOS/Source/include" \
+	-I"$(LIB_DIR_H7XX)/Middlewares/FreeRTOS/Source/portable/GCC/ARM_CM4F" \
 	-I"application" \
 	-I"application/lib" \
 	-MMD -MP -c
@@ -47,12 +48,14 @@ LINKFLAGS = -mcpu=cortex-m7 \
 	-specs=nosys.specs
 #	-specs=nano.specs
 
-LIBRARIES = $(LIB_DIR_H7XX)/Middlewares/FreeRTOS/Source/timers.c \
+LIBRARIES = $(LIB_DIR_H7XX)/Middlewares/FreeRTOS/Source/portable/MemMang/heap_4.c \
+	$(LIB_DIR_H7XX)/Middlewares/FreeRTOS/Source/portable/GCC/ARM_CM4F/port.c \
 	$(LIB_DIR_H7XX)/Middlewares/FreeRTOS/Source/queue.c \
+	$(LIB_DIR_H7XX)/Middlewares/FreeRTOS/Source/timers.c \
 	$(LIB_DIR_H7XX)/Middlewares/FreeRTOS/Source/tasks.c \
-	$(LIB_DIR_H7XX)/Middlewares/FreeRTOS/Source/event_groups.c \
-	$(LIB_DIR_H7XX)/Middlewares/FreeRTOS/Source/croutine.c \
 	$(LIB_DIR_H7XX)/Middlewares/FreeRTOS/Source/list.c \
+	$(LIB_DIR_H7XX)/Middlewares/FreeRTOS/Source/croutine.c \
+	$(LIB_DIR_H7XX)/Middlewares/FreeRTOS/Source/event_groups.c \
 	$(LIB_DIR_H7XX)/Middlewares/FreeRTOS/Source/stream_buffer.c \
 	$(LIB_DIR_H7XX)/Drivers/BSP/STM32H7xx_Nucleo_144/stm32h7xx_nucleo_144.c \
 	$(LIB_DIR_H7XX)/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_dma.c \
@@ -72,9 +75,6 @@ LIBRARIES = $(LIB_DIR_H7XX)/Middlewares/FreeRTOS/Source/timers.c \
 	$(LIB_DIR_H7XX)/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_cortex.c \
 	$(LIB_DIR_H7XX)/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart.c \
 	$(LIB_DIR_H7XX)/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_i2c.c \
-	$(LIB_DIR_H7XX)/Middlewares/FreeRTOS/Source/portable/MemMang/heap_4.c \
-	$(LIB_DIR_H7XX)/Middlewares/FreeRTOS/Source/portable/GCC/ARM_CM4_MPU/port.c \
-	$(LIB_DIR_H7XX)/Middlewares/FreeRTOS/Source/portable/Common/mpu_wrappers.c \
 	application/SW4STM32/startup_stm32h743xx.s
 
 # $(LIB_DIR_H7XX)/SW4STM32/syscalls.c
