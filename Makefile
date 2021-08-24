@@ -252,7 +252,11 @@ $(BIN_DIR):
 clean:
 	rm -fR $(OBJ_DIR) $(BIN_DIR) 
 
-flash: # build
+sym-flash: sym-build
 	bash -c "\
-	java -jar $(STM32BASE)/tools/stsw-link007/AllPlatforms/./STLinkUpgrade.jar \
-	"
+	st-flash --format ihex write $(SYMBOLS_HEX)"
+
+flash: build
+	bash -c "\
+	st-flash erase; \
+	st-flash --reset write build/bin/firmware.bin 0x08000000"

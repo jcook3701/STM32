@@ -19,7 +19,7 @@ then
 fi
 # DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )/../" && pwd )
 # PROJECTS=(${STM32BASE}/firmware/Starter/ ${STM32BASE}/firmware/examples/*/)
-PROJECTS=(${STM32BASE}/firmware/stm32H743/examples/*/ ${STM32BASE}/firmware/stm32L432/examples/*/)
+PROJECTS=(${STM32BASE}/firmware/stm32h743/examples/*/ ${STM32BASE}/firmware/stm32l432/examples/*/)
 for PROJECT in ${PROJECTS[@]}
 do
     echo "Removing link for: $PROJECT/ENV.sh"
