@@ -3,6 +3,8 @@ firmware/**/bin
 firmware/**/obj
 firmware/**/makefile
 firmware/**/Makefile
+firmware/**/Env.sh
+firmware/**/env.sh
 
 # !firmware/lib
 # !firmware/examples

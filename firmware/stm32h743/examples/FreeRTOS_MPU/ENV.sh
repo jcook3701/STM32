@@ -1,1 +1,0 @@
-/home/jcook/Documents/git_repo/STM32/ENV.sh
